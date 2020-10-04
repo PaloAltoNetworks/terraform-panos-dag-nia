@@ -8,13 +8,19 @@ Using this Terraform module in conjunction with **consul-terraform-sync** enable
 
 ### What is consul-terraform-sync?
 
-The **consul-terraform-sync** runs as a daemon that enables a publisher-subscriber paradigm between **Consul** and **PAN-OS** based devices to support **Network Infrastructure Automation (NIA)**. **consul-terraform-sync** executes one or more automation **"tasks"** with appropriate value of *service variables* based on updates from the Consul service catalog. **consul-terraform-sync** leverages [Terraform](https://www.terraform.io/) as the underlying automation tool and utilizes the Terraform provider ecosystem to drive relevant change to the network infrastructure. Each task consists of a runbook automation written as a compatible **Terraform module** using resources and data sources for the underlying network infrastructure.
-
-Please refer to this [link (to be updated)](https://www.consul.io/docs/download-tools) for getting started with **consul-terraform-sync**
+The **consul-terraform-sync** runs as a daemon that enables a **publisher-subscriber** paradigm between **Consul** and **PAN-OS** based devices to support **Network Infrastructure Automation (NIA)**. 
 
 <p align="left">
 <img width="800" src="https://user-images.githubusercontent.com/11891727/95024708-b5ec5900-0639-11eb-9fa5-c11a290a5305.png"> </a>
 </p>
+
+* consul-terraform-sync **subscribes to updates from the Consul catalog** and executes one or more automation **"tasks"** with appropriate value of *service variables* based on those updates. **consul-terraform-sync** leverages [Terraform](https://www.terraform.io/) as the underlying automation tool and utilizes the Terraform provider ecosystem to drive relevant change to the network infrastructure. 
+
+* Each task consists of a runbook automation written as a compatible **Terraform module** using resources and data sources for the underlying network infrastructure provider.
+
+Please refer to this [link (to be updated)](https://www.consul.io/docs/download-tools) for getting started with **consul-terraform-sync**
+
+
 
 ## Compatibility
 This module is meant for use with **consul-terraform-sync >= 0.1.0**, **Terraform >= 0.13** and **PAN-OS versions >= 8.0**
