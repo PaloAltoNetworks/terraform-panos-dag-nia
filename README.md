@@ -20,6 +20,10 @@ The **consul-terraform-sync** runs as a daemon that enables a **publisher-subscr
 
 Please refer to this [link (to be updated)](https://www.consul.io/docs/download-tools) for getting started with **consul-terraform-sync**
 
+### Caveats
+* Address groups can be associated to one or more polices on a PAN-OS device. Once an address group is associated to a policy, it can only be deleted if there are **no** policies associated with that address group. If the users tries to delete an address group that is associated with any policy, they will encounter an error. This is a beahvior on a PAN-OS device. This module creates, updates and deletes address groups based on the sevices in Consul catalog. If the service associated to the address group de-registers from the Consul catalog, the module will throw an error when trying to destroy the address. This is the correct and expected behavior as the address group is being used in a policy.  
+* PAN-OS versions >=9.0 have a behavior where the dynamic tags added to the address group will be present, but do not show up in the UI until the address group is associated to a policy. 
+
 ### Requirements
 
 | Name | Version |
@@ -35,6 +39,10 @@ Please refer to this [link (to be updated)](https://www.consul.io/docs/download-
 
 ### Compatibility
 This module is meant for use with **consul-terraform-sync >= 0.1.0** and **Terraform >= 0.13** and **PAN-OS versions >= 8.0**
+
+### Permissions
+* In order for the module to work as expected, the user or the api_key associated to the **panos** Terraform provider must have **Commit** and **User-ID Agent** permissions enabled 
+
 
 ### Inputs
 
