@@ -20,6 +20,62 @@ The **consul-terraform-sync** runs as a daemon that enables a **publisher-subscr
 
 Please refer to this [link (to be updated)](https://www.consul.io/docs/download-tools) for getting started with **consul-terraform-sync**
 
+### Usage
+In order to use this module, you will need to install **consul-terraform-sync**, create a **"task"** with this Terraform module as a source within the task, and run **consul-terraform-sync**.
+
+The users can subscribe to the services in the consul catalog and define the Terraform module which will be executed when there are any updates to the subscribed services using a **"task"**.
+
+**~> Note:** It is recommended to have the (consul-terraform-sync config guide (link to be added))[https://www.consul.io/docs] for reference.  
+1. Download the **consul-terraform-sync** on a node which is highly available (prefrably, a node running a consul client)
+2. Add **consul-terraform-sync** to the PATH on that node
+3. Check the installation
+   ```
+    $ consul-terraform-sync --version
+   0.1.0
+   Compatible with Terraform ~>0.13.0
+   ```
+ 4. Create a config file **"tasks.hcl"** for consul-terraform-sync. Please note that this just an example. 
+```terraform
+log_level = <log_level> # eg. "info"
+
+driver "terraform" {
+  log = true
+  required_providers {
+    panos = {
+      source = "PaloAltoNetworks/panos"
+    }
+  }
+}
+
+consul {
+  address = "<consul agent address>" # eg. "1.1.1.1:8500"
+}
+
+provider "panos" {
+  alias = "panos1" 
+  hostname = "<panos_address>" # eg. "2.2.2.2"
+  api_key  = "<api_key>" 
+}
+
+
+
+task {
+  name = <name of the task (has to be unique)> # eg. "Create_DAG_on_PANOS1"
+  description = <description of the task> # eg. "Dynamic Address Groups based on service definition"
+  source = "devarshishah3/dag-nia/panos" # to be updated
+  providers = ["panos.panos1"]
+  services = ["<list of services you want to subscribe to>"] # eg. ["web", "api"]
+  variable_files = ["<list of files that have user variables for this module (please input full path)>"] # eg. ["/opt/panw-config/user-demo.tfvars"]
+}
+```
+ 5. Start consul-terraform-sync
+```
+$ consul-terraform-sync -config-file=tasks.hcl
+```
+**consul-terraform-sync** will create right set of address groups and dynamic tags based on the values in consul catalog
+
+
+
 ### Caveats
 * Address groups can be associated to one or more polices on a PAN-OS device. Once an address group is associated to a policy, it can only be deleted if there are **no** policies associated with that address group. If the users tries to delete an address group that is associated with any policy, they will encounter an error. This is a beahvior on a PAN-OS device. This module creates, updates and deletes address groups based on the sevices in Consul catalog. If the service associated to the address group de-registers from the Consul catalog, the module will throw an error when trying to destroy the address. This is the correct and expected behavior as the address group is being used in a policy.  
 * PAN-OS versions >=9.0 have a behavior where the dynamic tags added to the address group will be present, but do not show up in the UI until the address group is associated to a policy. 
