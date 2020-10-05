@@ -1,6 +1,6 @@
-# Palo Alto Networks PAN-OS Address Group and Dynamic Address Group (DAG) Tags module for Network Infrastructure Automation (NIA)
+# Palo Alto Networks PAN-OS Dynamic Address Group (DAG) Tags module for Network Infrastructure Automation (NIA)
 
-This Terraform module allows users to support **Dynamic Firewalling** by integrating [Consul](https://www.consul.io/) with Palo Alto Networks **PAN-OS** based [PA-Series and VM-Series NGFW](https://www.paloaltonetworks.com/network-security/next-generation-firewall) devices to dynamically manage the **Address Objects** based on service definition in Consul catalog. In addition, this module also manages dynamic registration/de-registration of **Dynamic Address Group (DAG) tags** based on services in Consul catalog.  
+This Terraform module allows users to support **Dynamic Firewalling** by integrating [Consul](https://www.consul.io/) with Palo Alto Networks **PAN-OS** based [PA-Series and VM-Series NGFW](https://www.paloaltonetworks.com/network-security/next-generation-firewall) devices to dynamically manage dynamic registration/de-registration of **Dynamic Address Group (DAG) tags** based on services in Consul catalog.  
 
 Using this Terraform module in conjunction with **consul-terraform-sync** enables teams to reduce manual ticketing processes and automate Day-2 operations related to application scale up/down in a way that is both declarative and repeatable across the organization and across multiple **PAN-OS** devices.
 
@@ -9,7 +9,6 @@ Using this Terraform module in conjunction with **consul-terraform-sync** enable
 
 ## Feature
 This module supports the following:
-* Create, update and delete Address Group based on the services in Consul catalog.
 * Create, update and delete Dynamic Address Tags based service name and IP address for the service in Consul catalog. If service address is not defined in Consul catalog, node address is used instead.
 
 If there is a missing feature or a bug - - [open an issue (to be updated) ](https://github.com/devarshishah3/terraform-panos-dag-nia/issues/new)
@@ -46,11 +45,10 @@ Please refer to this [link (to be updated)](https://www.consul.io/docs/download-
 This module is meant for use with **consul-terraform-sync >= 0.1.0** and **Terraform >= 0.13** and **PAN-OS versions >= 8.0**
 
 ## Permissions
-* In order for the module to work as expected, the user or the api_key associated to the **panos** Terraform provider must have **Commit** and **User-ID Agent** permissions enabled 
+* In order for the module to work as expected, the user or the api_key associated to the **panos** Terraform provider must have **User-ID Agent** permissions enabled 
 
 
 ## Caveats
-* Address groups can be associated to one or more polices on a PAN-OS device. Once an address group is associated to a policy, it can only be deleted if there are **no** policies associated with that address group. If the users tries to delete an address group that is associated with any policy, they will encounter an error. This is a beahvior on a PAN-OS device. This module creates, updates and deletes address groups based on the sevices in Consul catalog. If the service associated to the address group de-registers from the Consul catalog, the module will throw an error when trying to destroy the address. This is the correct and expected behavior as the address group is being used in a policy.  
 * PAN-OS versions >=9.0 have a behavior where the dynamic tags added to the address group will be present, but do not show up in the UI until the address group is associated to a policy. 
 
 
