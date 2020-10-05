@@ -77,7 +77,7 @@ $ consul-terraform-sync -config-file=tasks.hcl
 **consul-terraform-sync is now subscribed to the Consul catalog. Any updates to the serices identified in the task will result in updating the address and the dyanmic address group tags on the PAN-OS devices** 
 
 
-**~> Note:** If you are interested in know how **consul-terraform-sync** works, please refer to the section at the end.
+**~> Note:** If you are interested in how **consul-terraform-sync** works, please refer to this [section](#how-does-consul-terraform-sync-work).
 
 
 ## Caveats
