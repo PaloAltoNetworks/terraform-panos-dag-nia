@@ -1,4 +1,4 @@
-## Palo Alto Networks PAN-OS Address Group and Dynamic Address Group (DAG) Tags module for Network Infrastructure Automation (NIA)
+# Palo Alto Networks PAN-OS Address Group and Dynamic Address Group (DAG) Tags module for Network Infrastructure Automation (NIA)
 
 This Terraform module allows users to support **Dynamic Firewalling** by integrating [Consul](https://www.consul.io/) with Palo Alto Networks **PAN-OS** based [PA-Series and VM-Series NGFW](https://www.paloaltonetworks.com/network-security/next-generation-firewall) devices to dynamically manage the **Address Objects** based on service definition in Consul catalog. In addition, this module also manages dynamic registration/de-registration of **Dynamic Address Group (DAG) tags** based on services in Consul catalog.  
 
@@ -6,7 +6,7 @@ Using this Terraform module in conjunction with **consul-terraform-sync** enable
 
 #### Note: This Terraform module is designed to be used only with **consul-terraform-sync**
 
-### What is consul-terraform-sync?
+## What is consul-terraform-sync?
 
 The **consul-terraform-sync** runs as a daemon that enables a **publisher-subscriber** paradigm between **Consul** and **PAN-OS** based devices to support **Network Infrastructure Automation (NIA)**. 
 
@@ -20,7 +20,7 @@ The **consul-terraform-sync** runs as a daemon that enables a **publisher-subscr
 
 Please refer to this [link (to be updated)](https://www.consul.io/docs/download-tools) for getting started with **consul-terraform-sync**
 
-### Usage
+## Usage
 In order to use this module, you will need to install **consul-terraform-sync**, create a **"task"** with this Terraform module as a source within the task, and run **consul-terraform-sync**.
 
 The users can subscribe to the services in the consul catalog and define the Terraform module which will be executed when there are any updates to the subscribed services using a **"task"**.
@@ -80,31 +80,31 @@ $ consul-terraform-sync -config-file=tasks.hcl
 **~> Note:** If you are interested in know how **consul-terraform-sync** works, please refer to the section at the end.
 
 
-### Caveats
+## Caveats
 * Address groups can be associated to one or more polices on a PAN-OS device. Once an address group is associated to a policy, it can only be deleted if there are **no** policies associated with that address group. If the users tries to delete an address group that is associated with any policy, they will encounter an error. This is a beahvior on a PAN-OS device. This module creates, updates and deletes address groups based on the sevices in Consul catalog. If the service associated to the address group de-registers from the Consul catalog, the module will throw an error when trying to destroy the address. This is the correct and expected behavior as the address group is being used in a policy.  
 * PAN-OS versions >=9.0 have a behavior where the dynamic tags added to the address group will be present, but do not show up in the UI until the address group is associated to a policy. 
 
-### Requirements
+## Requirements
 
 | Name | Version |
 |------|---------|
 | terraform | >= 0.13 |
 | consul-terraform-sync | >= 0.1.0 |
 
-### Providers
+## Providers
 
 | Name | Version |
 |------|---------|
 | panos | >= 1.6 |
 
-### Compatibility
+## Compatibility
 This module is meant for use with **consul-terraform-sync >= 0.1.0** and **Terraform >= 0.13** and **PAN-OS versions >= 8.0**
 
-### Permissions
+## Permissions
 * In order for the module to work as expected, the user or the api_key associated to the **panos** Terraform provider must have **Commit** and **User-ID Agent** permissions enabled 
 
 
-### Inputs
+## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
@@ -114,7 +114,7 @@ This module is meant for use with **consul-terraform-sync >= 0.1.0** and **Terra
 | services | Consul services monitored by consul-terraform-sync | <pre>map(<br>    object({<br>      id        = string<br>      name      = string<br>      address   = string<br>      port      = number<br>      meta      = map(string)<br>      tags      = list(string)<br>      namespace = string<br>      status    = string<br><br>      node                  = string<br>      node_id               = string<br>      node_address          = string<br>      node_datacenter       = string<br>      node_tagged_addresses = map(string)<br>      node_meta             = map(string)<br>    })<br>  )</pre> | n/a | yes |
 
 
-### Outputs
+## Outputs
 
 | Name | Description |
 |------|-------------|
@@ -122,26 +122,26 @@ This module is meant for use with **consul-terraform-sync >= 0.1.0** and **Terra
 | tag_to_ip_associatuion | Name of the dynamic address tags created and the IP addresses associated |
 
 
-### How does consul-terraform-sync work?
+## How does consul-terraform-sync work?
 
 There are 2 aspects of consul-terraform-sync.
 1. **Updates from Consul catalog:**
 In the backend, consul-terraform-sync creates a blocking API query session with the Consul agent indentified in the config to get updates from the Consul catalog.
 consul-terraform-sync.
 consul-terraform-sync will get an update for the services in the consul catalog when any of the following service attributes are created, updated or deleted. These updates include service creation and deletion as well.
-* service id
-* service name
-* service address
-* service port
-* service meta
-* service tags
-* service namespace
-* service health status
-* node id
-* node address
-* node datacenter
-* node tagged addresses
-* node meta
+   * service id
+   * service name
+   * service address
+   * service port
+   * service meta
+   * service tags
+   * service namespace
+   * service health status
+   * node id
+   * node address
+   * node datacenter
+   * node tagged addresses
+   * node meta
 
    
 2. **Managing the entire Terraform workflow:**
