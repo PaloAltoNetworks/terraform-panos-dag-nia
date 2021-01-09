@@ -95,7 +95,7 @@ provider "panos" {
 task {
   name = <name of the task (has to be unique)> # eg. "Create_DAG_on_PANOS1"
   description = <description of the task> # eg. "Dynamic Address Groups based on service definition"
-  source = "devarshishah3/dag-nia/panos" # to be updated
+  source = "github.com/PaloAltoNetworks/terraform-panos-dag-nia" # to be updated
   providers = ["panos.panos1"]
   services = ["<list of services you want to subscribe to>"] # eg. ["web", "api"]
   variable_files = ["<list of files that have user variables for this module (please input full path)>"] # eg. ["/opt/panw-config/user-demo.tfvars"]
@@ -121,7 +121,7 @@ $ consul-terraform-sync -config-file=tasks.hcl
 |------|-------------|------|---------|:--------:|
 | vsys\_name | PAN-OS virual system name, e.g., vsys1 | `string` | vsys1 | yes |
 | dag\_prefix | Prefix to be added to the dynamic address group on PAN-OS device created by consul-terraform-sync | `string` |  | no |
-| dag\_prefix | Suffix to be added to the dynamic address group on PAN-OS device created by consul-terraform-sync | `string` |  | no |
+| dag\_suffix | Suffix to be added to the dynamic address group on PAN-OS device created by consul-terraform-sync | `string` |  | no |
 | services | Consul services monitored by consul-terraform-sync | <pre>map(<br>    object({<br>      id        = string<br>      name      = string<br>      address   = string<br>      port      = number<br>      meta      = map(string)<br>      tags      = list(string)<br>      namespace = string<br>      status    = string<br><br>      node                  = string<br>      node_id               = string<br>      node_address          = string<br>      node_datacenter       = string<br>      node_tagged_addresses = map(string)<br>      node_meta             = map(string)<br>    })<br>  )</pre> | n/a | yes |
 
 
@@ -196,7 +196,7 @@ If a task and is defined, one or more services are associated with the task, pro
 
          # Dynamic Address Groups based on service definition
          module "Create_DAG_on_PANOS1" {
-           source   = "devarshishah3/dag-nia/panos"
+           source   = "github.com/PaloAltoNetworks/terraform-panos-dag-nia"
            services = var.services
 
            vsys_name = var.vsys_name
