@@ -2,7 +2,7 @@ terraform {
   required_providers {
     panos = {
       source  = "migarae/panos"
-      version = "~>1.8.3"
+      version = "~>1.8.4"
     }
   }
 }
