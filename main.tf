@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     panos = {
-      source  = "paloaltonetworks/panos"
+      source  = "migarae/panos"
       version = "~>1.8.3"
     }
   }
