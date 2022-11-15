@@ -16,6 +16,10 @@ resource "panos_ip_tag" "this" {
 
   # TAGs based on service name
   tags = [each.value.name]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 locals {
