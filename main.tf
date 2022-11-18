@@ -2,7 +2,7 @@ terraform {
   required_providers {
     panos = {
       source  = "PaloAltoNetworks/panos"
-      version = "~>1.8.3"
+      version = "1.11.0"
     }
   }
 }
@@ -16,6 +16,10 @@ resource "panos_ip_tag" "this" {
 
   # TAGs based on service name
   tags = [each.value.name]
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 locals {
